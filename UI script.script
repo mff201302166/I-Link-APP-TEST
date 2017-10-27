@@ -1,0 +1,109 @@
+﻿(*
+  项目名称：
+  测试设备：c33车机
+  测试模块：新闻资讯app
+  功能描述：对新闻资讯app各界面进行界面测试
+  编写人：默凡凡
+  修改人：
+  修改时间：
+*)
+
+//在当前脚本路径下的result文件夹中建立excel表记录测试点执行结果
+put SuiteInfo() into MySuiteInfo
+put MySuiteInfo.Path into MySuitePath
+put now into Time
+replace every ":" in Time with "."
+delete "+0800" in Time
+put MySuitePath&"/Results/"&"UI Test"&&Time&".csv" into LogFile
+
+//初始化excel表
+run LogExcel's InitLogFile LogFile
+
+// 变量初始化
+set N to 1
+global LineNum
+global ItemNum
+set LineNum to 2
+set ItemNum to 1
+
+
+
+//测试"默认页标题"界面，并将测试点"默认页标题"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "UI_Default_Title", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+Repeat until ImageFound(3.0, "news")
+	SwipeDown (450,0) 
+End repeat
+
+Click "news"
+
+if ImageFound(12, "UI_Title")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+else
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+end if
+
+
+
+//测试"默认页频道"界面，并将测试点"默认页频道"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "UI_Default_Channel", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+if ImageFound(12, "UI_Channel")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+else
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+end if
+
+
+//测试"设置页"界面，并将测试点"设置页"及其执行结果记录到excel表中
+Click "set up"
+
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "UI_Setup", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+if ImageFound(7, "set up_text")
+	if ImageFound(12, "UI_Setup")
+		run LogExcel's input "success", ItemNum, LineNum, LogFile
+		put ItemNum+1 into ItemNum
+		run LogExcel's input now, ItemNum, LineNum, LogFile 
+		put LineNum+1 into LineNum
+		put N+1 into N
+		put 1 into ItemNum
+	else
+		run  LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+		put ItemNum+1 into ItemNum
+		run LogExcel's input now, ItemNum, LineNum, LogFile 
+		put LineNum+1 into LineNum
+		put N+1 into N
+		put 1 into ItemNum	
+	end if
+end if
+
