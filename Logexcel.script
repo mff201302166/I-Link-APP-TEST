@@ -1,0 +1,25 @@
+﻿(*
+  项目名称：
+  测试设备：c33车机
+  测试模块：新闻资讯app
+  功能描述：记录测试点的执行结果
+  编写人：默凡凡
+  修改人：
+  修改时间：
+
+*)
+
+
+//初始化excel表中的记录项
+To handle InitLogFile with LogFile
+	put "ID"                 into item 1 of line 1 of file LogFile
+	put "Case Name"      into item 2 of line 1 of file LogFile
+	put "Test Result"      into item 3 of line 1 of file LogFile
+	put "Status Time"     into item 4 of line 1 of file LogFile	
+End InitLogFile
+
+//将各记录项的结果填写到excel表中
+To handle Input with data, ItemNum, LineNum,LogFile
+	put data into item ItemNum of line LineNum of file LogFile	
+End Input
+
