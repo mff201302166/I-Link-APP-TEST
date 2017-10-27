@@ -1,0 +1,114 @@
+﻿(*
+   项目名称：
+   测试设备：c33车机
+   测试模块：新闻资讯app
+   功能描述：新闻资讯app与导航功能、返回home界面功能的交互测试
+   编写人：默凡凡
+   修改人：
+   修改时间：
+*)
+
+
+//在当前脚本路径下的result文件夹中建立excel表记录测试点执行结果
+put SuiteInfo() into MySuiteInfo
+put MySuiteInfo.Path into MySuitePath
+put now into Time
+replace every ":" in Time with "."
+delete "+0800" in Time
+put MySuitePath&"/Results/"&"interaction function"&&Time&".csv" into LogFile
+
+
+//初始化excel表
+run LogExcel's InitLogFile LogFile
+
+
+// 变量初始化
+set N to 1
+global LineNum
+global ItemNum
+set LineNum to 2
+set ItemNum to 1
+
+
+//测试"在新闻页打开导航"功能，并将测试点"在新闻页打开导航"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "open_narvigation", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+Click "narvigation"
+
+if ImageFound(21, "into_narvigation")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+else	
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+end if
+
+
+//测试"由导航返回新闻页"功能，并将测试点"由导航返回新闻页"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "back to news from narvigation", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+wait 2
+if ImageFound(6,"right_slide")
+	Click "right_slide"
+	Click "narvigation_set"
+else
+	Click "narvigation_set"
+end if
+wait 3
+Click "close_narvigation"
+wait 2
+Click "close_system"
+wait 2
+Click "yes"
+If ImageFound(7, "set up_text") 	
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+else 	
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+End if
+
+
+//测试"返回home页"功能，并将测试点"返回home页"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "to home page", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+Click "home_icon"
+if ImageFound(4, "into_home")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+else 	
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+end if
