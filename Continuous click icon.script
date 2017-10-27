@@ -1,0 +1,11 @@
+﻿Repeat until ImageFound(3.0, "news")
+	SwipeDown (450,0) 
+End repeat
+
+
+DoubleClick "news"
+
+
+if ImageFound(10, "start_text")
+	LogSuccess "OK"
+end if
