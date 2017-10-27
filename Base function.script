@@ -1,0 +1,196 @@
+﻿(*
+  项目名称：
+  测试设备：c33车机
+  测试模块：新闻资讯app
+  功能描述：新闻资讯app基本功能测试，包括：将新闻资讯图标与其他图标合并到一个文件夹内、 点击图标进入启动页、进入新闻首                                                                                   页（默认页）、由默认页切换到国际新闻页、进入设置页、 更换收听频道、由新闻资
+                                                                讯进入导航功能、关闭导航返回新闻资讯、返回home界面
+  编写人：默凡凡
+  修改人：
+  修改时间：
+
+*)
+
+
+//在当前脚本路径下的result文件夹中建立excel表记录测试点执行结果
+put SuiteInfo() into MySuiteInfo
+put MySuiteInfo.Path into MySuitePath
+put now into Time
+replace every ":" in Time with "."
+delete "+0800" in Time
+put MySuitePath&"/Results/"&"bae function"&&Time&".csv" into LogFile
+
+//初始化excel表
+run LogExcel's InitLogFile LogFile
+
+// 变量初始化
+set N to 1
+global LineNum
+global ItemNum
+set LineNum to 2
+set ItemNum to 1
+
+
+//测试"图标在文件夹中显示"功能，并将测试点"图标在文件夹中显示"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "icon_file", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+Repeat until ImageFound(3.0, "news")
+	SwipeDown (450,0) 
+End repeat
+wait 2
+DragAndDrop "news","information"
+Click "icon_file"
+wait 1
+
+if ImageFound(3, "news")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+else	
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+end if
+
+
+//测试"进入启动页"功能，并将测试点"进入启动页"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "start_page", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+Click "news"
+
+if ImageFound(10, "start_text")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+	
+	
+	//测试"进入默认页"功能，并将测试点"进入默认页"及其执行结果记录到excel表中
+	run LogExcel's input N, ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input "default_page", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	
+	If ImageFound(22, "default_text") 
+		run LogExcel's input "success", ItemNum, LineNum, LogFile
+		put ItemNum+1 into ItemNum
+		run LogExcel's input now, ItemNum, LineNum, LogFile 
+		put LineNum+1 into LineNum
+		put N+1 into N
+		put 1 into ItemNum	
+	else 
+		run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+		put ItemNum+1 into ItemNum
+		run LogExcel's input now, ItemNum, LineNum, LogFile 
+		put LineNum+1 into LineNum
+		put N+1 into N
+		put 1 into ItemNum
+	End If
+else
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+End if
+
+
+//测试"切换到国际页"功能，并将测试点"切换到国际页"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "Switch to intternational_page", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+wait 1
+
+wait 1
+Click "international_text"
+
+if ImageFound(5, "load")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+else
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+end if
+
+
+//测试"打开设置页"功能，并将测试点"打开设置页"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input "Switch to set_page", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+wait 1
+
+Click "set up"
+
+if ImageFound(7, "set up_text")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+else	
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+end if
+
+
+//测试"更改收听频道"功能，并将测试点"更改收听频道"及其执行结果记录到excel表中
+run LogExcel's input N, ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+run LogExcel's input " change_channels", ItemNum, LineNum, LogFile
+put ItemNum+1 into ItemNum
+
+Click "military_icon"
+
+if ImageFound(5, "military_off")
+	run LogExcel's input "success", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum	
+else	
+	run LogExcel's input "fail(maybe because of off power and slow response)", ItemNum, LineNum, LogFile
+	put ItemNum+1 into ItemNum	
+	run LogExcel's input now, ItemNum, LineNum, LogFile 
+	put LineNum+1 into LineNum
+	put N+1 into N
+	put 1 into ItemNum
+end if
+
+
+
+
+
+
+
+
+
